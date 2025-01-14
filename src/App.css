@@ -1,0 +1,35 @@
+/* Light Theme */
+.app-container.light {
+    background-color: #ffffff;
+    color: #000000;
+  }
+  
+  /* Dark Theme */
+  .app-container.dark {
+    background-color: #121212; /* Deep dark background */
+    color: #e0e0e0; /* Light gray text */
+  }
+  
+  /* Buttons and accents */
+  .button-light {
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #e4e7eb;
+  }
+  
+  .button-dark {
+    background-color: #1e1e1e; /* Dark button background */
+    color: #b39ddb; /* Light purple text */
+    border: 1px solid #673ab7; /* Purple border */
+  }
+  
+  .button-dark:hover {
+    background-color: #673ab7; /* Purple hover */
+    color: #ffffff; /* White text */
+  }
+  
+  /* Smooth transitions */
+  .app-container {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  

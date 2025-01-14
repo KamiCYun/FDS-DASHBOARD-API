@@ -42,8 +42,11 @@ uvicorn.log
 
 # Node.js dependencies (if Firebase CLI is used)
 functions/node_modules/
+node_modules/
+package-lock.json
 
 # Firebase hosting build files
 dist/
 firebase-debug.log
 .firebase/
+build/
