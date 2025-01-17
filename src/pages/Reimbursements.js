@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Table, Button, Pane, Heading } from "evergreen-ui"; // Updated import for Heading
 import { useTheme } from "../App"; // Import ThemeContext
 
+const API_BASE_URL = "https://api-pihdtekhfq-uc.a.run.app/";
 const Reimbursements = () => {
   const { theme } = useTheme(); // Access the current theme
 
@@ -15,40 +16,37 @@ const Reimbursements = () => {
     buttonTextColor: theme === "light" ? "#ffffff" : "#e0e0e0",
   };
 
-  // Sample data for reimbursement requests
-  const [reimbursements, setReimbursements] = useState([
-    {
-      date: "2025-01-10",
-      requester: "John Doe",
-      amount: 150,
-      reason: "Event Supplies",
-    },
-    {
-      date: "2025-01-12",
-      requester: "Jane Smith",
-      amount: 75,
-      reason: "Transportation",
-    },
-    {
-      date: "2025-01-15",
-      requester: "Emma Johnson",
-      amount: 200,
-      reason: "Equipment Rental",
-    },
-  ]);
+  const [reimbursements, setReimbursements] = useState([]);
 
-  const handleApprove = (index) => {
-    const updatedReimbursements = [...reimbursements];
-    updatedReimbursements.splice(index, 1); // Remove the approved request
-    setReimbursements(updatedReimbursements);
-    alert("Reimbursement approved.");
+  const fetchReimbursements = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/reimbursements`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      setReimbursements(data);
+    } catch (error) {
+      console.error("Error fetching reimbursements:", error);
+    }
   };
 
-  const handleDeny = (index) => {
-    const updatedReimbursements = [...reimbursements];
-    updatedReimbursements.splice(index, 1); // Remove the denied request
-    setReimbursements(updatedReimbursements);
-    alert("Reimbursement denied.");
+  useEffect(() => {
+    fetchReimbursements();
+  }, []);
+
+  const handleAction = async (id, action) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/reimbursements/${id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      setReimbursements(reimbursements.filter((r) => r.id !== id));
+    } catch (error) {
+      console.error(`Error ${action} reimbursement:`, error);
+    }
   };
 
   return (
@@ -98,9 +96,9 @@ const Reimbursements = () => {
           </Table.TextHeaderCell>
         </Table.Head>
         <Table.Body>
-          {reimbursements.map((request, index) => (
+          {reimbursements.map((request) => (
             <Table.Row
-              key={index}
+              key={request.id}
               style={{
                 backgroundColor: dynamicStyles.backgroundColor,
                 color: dynamicStyles.textColor,
@@ -127,7 +125,7 @@ const Reimbursements = () => {
                     color: dynamicStyles.buttonTextColor,
                     marginRight: 8,
                   }}
-                  onClick={() => handleApprove(index)}
+                  onClick={() => handleAction(request.id, "approved")}
                 >
                   Approve
                 </Button>
@@ -137,7 +135,7 @@ const Reimbursements = () => {
                   style={{
                     marginLeft: 8,
                   }}
-                  onClick={() => handleDeny(index)}
+                  onClick={() => handleAction(request.id, "denied")}
                 >
                   Deny
                 </Button>

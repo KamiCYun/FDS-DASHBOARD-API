@@ -8,3 +8,8 @@
 - add auth for api access
 - add upcoming events messenger bot
 - CLEAN FRONT END CODEBASE PLS
+- cache request results or something to reduce spamming api
+- add way to save current semester
+- add payload verification for patch functions so you can't just add random keys
+- add refresh when updating summary
+- add a contributers tab
