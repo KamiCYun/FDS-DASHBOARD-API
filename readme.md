@@ -1,4 +1,4 @@
-###TODO:
+### TODO:
 - 2 Write documentation on everything
 - 5 Finish Venmo parser/login library
 - 2 fix dark mode
@@ -14,7 +14,7 @@
 - 1 add refresh when updating summary
 - 3 add a contributers tab
 
-#Difficulty
+# Difficulty
 - 1: less than one day, bugs or small features
 - 2: 1-3 days, fixing existing features
 - 3: 1 week, creating new minor features
