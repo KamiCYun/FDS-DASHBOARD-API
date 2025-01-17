@@ -50,3 +50,6 @@ dist/
 firebase-debug.log
 .firebase/
 build/
+
+#test files
+test.py
