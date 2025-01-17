@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Pane,
   Heading,
@@ -12,6 +12,10 @@ import Statistics from "../components/Statistics";
 import TransactionsTable from "../components/TransactionsTable";
 import EditSummaryDialog from "../components/EditSummaryDialog";
 import ManageCategoriesDialog from "../components/ManageCategoriesDialog";
+import PieChart from "../components/PieChart";
+
+const API_BASE_URL = "http://localhost:5000/semesters"; // Update with your actual API base URL
+const TRANSACTIONS_API_BASE_URL = "http://localhost:5000/transactions"; // Transactions API base URL
 
 const HomePage = () => {
   const { theme } = useTheme(); // Access the current theme
@@ -26,119 +30,131 @@ const HomePage = () => {
     inputTextColor: theme === "light" ? "#000000" : "#e0e0e0",
   };
 
-  const [semesters, setSemesters] = useState(["Fall 2023", "Spring 2024"]);
-  const [selectedSemester, setSelectedSemester] = useState("Fall 2023");
+  const [semesters, setSemesters] = useState([]);
+  const [selectedSemester, setSelectedSemester] = useState(null);
+  const [isNewSemesterDialogShown, setIsNewSemesterDialogShown] = useState(false);
+  const [isDeleteSemesterDialogShown, setIsDeleteSemesterDialogShown] = useState(false);
   const [isEditDialogShown, setIsEditDialogShown] = useState(false);
   const [isCategoryDialogShown, setIsCategoryDialogShown] = useState(false);
-  const [isNewSemesterDialogShown, setIsNewSemesterDialogShown] =
-    useState(false);
-  const [isDeleteSemesterDialogShown, setIsDeleteSemesterDialogShown] =
-    useState(false);
   const [newSemesterName, setNewSemesterName] = useState("");
-  const [categories, setCategories] = useState([
-    "Dues",
-    "Event",
-    "Uncategorized",
-  ]);
+  const [semesterData, setSemesterData] = useState({});
+  const [categories, setCategories] = useState(["Dues", "Event", "Uncategorized"]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [semesterData, setSemesterData] = useState({
-    "Fall 2023": {
-      startingCapital: 1000,
-      activeHouseSize: 27,
-      insurance: 5000,
-      transactions: [
-        {
-          payer: "John",
-          time: "2023-09-01",
-          message: "Dues",
-          category: "Dues",
-          amount: 300,
-        },
-        {
-          payer: "Jane",
-          time: "2023-09-05",
-          message: "Event Fee",
-          category: "Event",
-          amount: -100,
-        },
-      ],
-    },
-    "Spring 2024": {
-      startingCapital: 2000,
-      activeHouseSize: 30,
-      insurance: 5500,
-      transactions: [
-        {
-          payer: "Emma",
-          time: "2024-01-10",
-          message: "Dues",
-          category: "Dues",
-          amount: 400,
-        },
-        {
-          payer: "Luke",
-          time: "2024-02-15",
-          message: "Fundraiser",
-          category: "Dues",
-          amount: 500,
-        },
-      ],
-    },
-  });
+  const [transactions, setTransactions] = useState([]);
 
-  const calculateCurrentCapital = () => {
-    const data = semesterData[selectedSemester];
-    return (
-      data.startingCapital +
-      data.transactions.reduce((sum, txn) => sum + txn.amount, 0)
-    );
-  };
+  const fetchSemesters = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/`);
+      const data = await response.json();
+      setSemesters(data);
 
-  const calculateSurplus = () => {
-    const data = semesterData[selectedSemester];
-    return calculateCurrentCapital() - data.startingCapital;
-  };
-
-  const handleCreateNewSemester = () => {
-    if (!newSemesterName.trim() || semesters.includes(newSemesterName.trim())) {
-      return; // Ignore empty or duplicate semester names
+      if (data.length > 0) {
+        setSelectedSemester(data[0].id);
+        setSemesterData(
+          data.reduce((acc, semester) => {
+            acc[semester.id] = semester;
+            return acc;
+          }, {})
+        );
+        fetchTransactions(data[0].id);
+      }
+    } catch (error) {
+      console.error("Error fetching semesters:", error);
     }
-    setSemesters((prev) => [...prev, newSemesterName.trim()]);
-    setSemesterData((prevData) => ({
-      ...prevData,
-      [newSemesterName.trim()]: {
-        startingCapital: 0,
-        activeHouseSize: 0,
-        insurance: 0,
-        transactions: [],
-      },
-    }));
-    setSelectedSemester(newSemesterName.trim()); // Automatically switch to the new semester
-    setNewSemesterName(""); // Clear the input
-    setIsNewSemesterDialogShown(false); // Close the dialog
   };
 
-  const handleDeleteSemester = () => {
-    const updatedSemesters = semesters.filter((sem) => sem !== selectedSemester);
-    const nextSemester = updatedSemesters.length > 0 ? updatedSemesters[0] : null;
-
-    setSemesters(updatedSemesters);
-    setSelectedSemester(nextSemester);
-    setSemesterData((prevData) => {
-      const { [selectedSemester]: _, ...rest } = prevData; // Remove the selected semester
-      return rest;
-    });
-
-    setIsDeleteSemesterDialogShown(false);
+  const fetchTransactions = async (semesterId) => {
+    try {
+      const response = await fetch(`${TRANSACTIONS_API_BASE_URL}/?semester_id=${semesterId}`);
+      const data = await response.json();
+      setTransactions(data.transactions || []);
+    } catch (error) {
+      console.error("Error fetching transactions:", error);
+    }
   };
 
-  const filteredTransactions =
-    semesterData[selectedSemester]?.transactions.filter((txn) =>
-      Object.values(txn)
-        .join(" ")
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase())
-    );
+  useEffect(() => {
+    fetchSemesters();
+  }, []);
+
+  const handleSelectSemester = (semesterId) => {
+    setSelectedSemester(semesterId);
+    fetchTransactions(semesterId);
+  };
+
+  const handleCreateNewSemester = async () => {
+    if (!newSemesterName.trim()) return;
+
+    const newSemester = {
+      name: newSemesterName.trim(),
+      date: new Date().toISOString().split("T")[0],
+      starting_capital: 0,
+      active_house_size: 0,
+      insurance_cost: 0,
+    };
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newSemester),
+      });
+
+      if (response.ok) {
+        const { data } = await response.json();
+        setSemesters((prev) => [...prev, data]);
+        setSemesterData((prevData) => ({ ...prevData, [data.id]: data }));
+        setSelectedSemester(data.id);
+        fetchTransactions(data.id);
+        setNewSemesterName("");
+        setIsNewSemesterDialogShown(false);
+      } else {
+        console.error("Failed to create semester");
+      }
+    } catch (error) {
+      console.error("Error creating semester:", error);
+    }
+  };
+
+  const handleDeleteSemester = async () => {
+    if (!selectedSemester) return;
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/${selectedSemester}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        const updatedSemesters = semesters.filter(
+          (semester) => semester.id !== selectedSemester
+        );
+
+        setSemesters(updatedSemesters);
+        const nextSemester = updatedSemesters.length > 0 ? updatedSemesters[0].id : null;
+        setSelectedSemester(nextSemester);
+
+        setSemesterData((prevData) => {
+          const { [selectedSemester]: _, ...rest } = prevData; // Remove the selected semester
+          return rest;
+        });
+        setTransactions([]);
+        setIsDeleteSemesterDialogShown(false);
+      } else {
+        console.error("Failed to delete semester");
+      }
+    } catch (error) {
+      console.error("Error deleting semester:", error);
+    }
+  };
+
+  const filteredTransactions = transactions.filter((txn) =>
+    Object.values(txn)
+      .join(" ")
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
+  );
 
   return (
     <Pane
@@ -159,11 +175,11 @@ const HomePage = () => {
         <SelectMenu
           title="Select Semester"
           options={semesters.map((semester) => ({
-            label: semester,
-            value: semester,
+            label: semester.name,
+            value: semester.id,
           }))}
           selected={selectedSemester}
-          onSelect={(item) => setSelectedSemester(item.value)}
+          onSelect={(item) => handleSelectSemester(item.value)}
         >
           <Button
             style={{
@@ -171,7 +187,9 @@ const HomePage = () => {
               color: dynamicStyles.buttonTextColor,
             }}
           >
-            {selectedSemester || "No Semesters Available"}
+            {selectedSemester
+              ? semesters.find((sem) => sem.id === selectedSemester)?.name
+              : "No Semesters Available"}
           </Button>
         </SelectMenu>
         <Button
@@ -211,15 +229,24 @@ const HomePage = () => {
         )}
       </Pane>
 
-      {selectedSemester && (
+      {selectedSemester && semesterData[selectedSemester] && (
         <>
           <Statistics
-            startingCapital={semesterData[selectedSemester].startingCapital}
-            currentCapital={calculateCurrentCapital()}
-            surplus={calculateSurplus()}
-            activeHouseSize={semesterData[selectedSemester].activeHouseSize}
-            insurance={semesterData[selectedSemester].insurance}
-            transactions={semesterData[selectedSemester].transactions}
+            startingCapital={
+              semesterData[selectedSemester].starting_capital || 0
+            }
+            currentCapital={
+              semesterData[selectedSemester].current_capital || 0
+            }
+            surplus={
+              (semesterData[selectedSemester].current_capital || 0) -
+              (semesterData[selectedSemester].starting_capital || 0)
+            }
+            activeHouseSize={
+              semesterData[selectedSemester].active_house_size || 0
+            }
+            insurance={semesterData[selectedSemester].insurance_cost || 0}
+            transactions={transactions || []}
             categories={categories}
           />
 
@@ -255,16 +282,8 @@ const HomePage = () => {
       <EditSummaryDialog
         isShown={isEditDialogShown}
         onClose={() => setIsEditDialogShown(false)}
-        semesterData={semesterData[selectedSemester]}
-        onSave={(updatedValues) =>
-          setSemesterData((prevData) => ({
-            ...prevData,
-            [selectedSemester]: {
-              ...prevData[selectedSemester],
-              ...updatedValues,
-            },
-          }))
-        }
+        semesterData={selectedSemester ? semesterData[selectedSemester] : {}}
+        onSave={(updatedValues) => console.log("Save semester summary", updatedValues)}
       />
       <ManageCategoriesDialog
         isShown={isCategoryDialogShown}
@@ -277,20 +296,7 @@ const HomePage = () => {
         }}
         onDeleteCategory={(category) => {
           if (category === "Uncategorized") return;
-          const updatedTransactions =
-            semesterData[selectedSemester].transactions.map((txn) =>
-              txn.category === category
-                ? { ...txn, category: "Uncategorized" }
-                : txn
-            );
           setCategories(categories.filter((cat) => cat !== category));
-          setSemesterData((prevData) => ({
-            ...prevData,
-            [selectedSemester]: {
-              ...prevData[selectedSemester],
-              transactions: updatedTransactions,
-            },
-          }));
         }}
       />
 
@@ -324,7 +330,9 @@ const HomePage = () => {
         intent="danger"
         onConfirm={handleDeleteSemester}
       >
-        Are you sure you want to delete the semester "{selectedSemester}"? This action cannot be undone.
+        Are you sure you want to delete the semester "{semesters.find(
+          (sem) => sem.id === selectedSemester
+        )?.name}"? This action cannot be undone.
       </Dialog>
     </Pane>
   );
