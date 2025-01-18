@@ -44,7 +44,7 @@ def create_category():
 
 @categories_bp.route("/<string:category_name>", methods=["DELETE"])
 def delete_category_by_name(category_name):
-    """Delete a category by name."""
+    """Delete a category by name and update associated transactions to 'Uncategorized'."""
     try:
         db = get_firestore_client()
         categories_ref = db.collection("categories")
@@ -59,6 +59,14 @@ def delete_category_by_name(category_name):
         for doc in matching_categories:
             doc.reference.delete()
 
-        return jsonify({"message": f"Category '{category_name}' deleted successfully."}), 200
+        # Update all transactions with the deleted category to 'Uncategorized'
+        transactions_ref = db.collection("transactions")
+        transactions_with_category = transactions_ref.where("category", "==", category_name).stream()
+
+        for txn in transactions_with_category:
+            txn.reference.update({"category": "Uncategorized"})
+
+        return jsonify({"message": f"Category '{category_name}' deleted and associated transactions updated to 'Uncategorized'."}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+

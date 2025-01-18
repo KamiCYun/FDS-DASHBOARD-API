@@ -18,9 +18,18 @@ function App() {
     <ThemeContext.Provider value={{ theme, setTheme }}>
       <div className={`app-container ${theme}`}>
         <Router>
+          {/* Main layout wrapper */}
           <div style={{ display: "flex", height: "100vh" }}>
             <Sidebar /> {/* Sidebar component */}
-            <div style={{ flexGrow: 1, padding: "16px" }}>
+            {/* Main content wrapper */}
+            <div
+              style={{
+                flexGrow: 1,
+                marginLeft: "250px", // Add margin to match Sidebar width
+                overflowY: "auto", // Allow content to scroll
+                padding: "16px",
+              }}
+            >
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/reimbursements" element={<Reimbursements />} />

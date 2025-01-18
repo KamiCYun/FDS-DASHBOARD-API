@@ -17,9 +17,13 @@ function Sidebar() {
       justifyContent="space-between"
       background={theme === "light" ? "#f9f9f9" : "#121212"}
       padding={16}
-      height="100vh"
+      height="100vh" // Full height of the viewport
       width={250}
       borderRight
+      position="fixed" // Make the sidebar fixed
+      top={0} // Align to the top of the viewport
+      left={0} // Align to the left of the viewport
+      zIndex={1000} // Ensure it appears above other content
     >
       {/* Top section with menu buttons */}
       <Pane>

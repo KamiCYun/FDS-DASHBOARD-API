@@ -13,8 +13,7 @@ import TransactionsTable from "../components/TransactionsTable";
 import EditSummaryDialog from "../components/EditSummaryDialog";
 import ManageCategoriesDialog from "../components/ManageCategoriesDialog";
 
-const API_BASE_URL = "http://localhost:5000/semesters"; // Update with your actual API base URL
-const TRANSACTIONS_API_BASE_URL = "http://localhost:5000/transactions"; // Transactions API base URL
+const API_BASE_URL = "http://localhost:5000"; // Update with your actual API base URL
 
 const HomePage = () => {
   const { theme } = useTheme(); // Access the current theme
@@ -43,7 +42,7 @@ const HomePage = () => {
 
   const fetchSemesters = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/`);
+      const response = await fetch(`${API_BASE_URL}/semesters`);
       const data = await response.json();
       setSemesters(data);
 
@@ -63,17 +62,33 @@ const HomePage = () => {
   };
 
   const fetchTransactions = async (semesterId) => {
+    let next_id = "";
+    while (next_id != null) {
+      try {
+        const response = await fetch(`${API_BASE_URL}/transactions/?semester_id=${semesterId}&start_after=${next_id}`);
+        const data = await response.json();
+        next_id = data.next_start_after;
+        setTransactions((prevTransactions) => [...prevTransactions, ...data.transactions || []]);
+      } catch (error) {
+        console.error("Error fetching transactions:", error);
+        next_id == null;
+      }
+    };
+  }
+
+  const fetchCategories = async () => {
     try {
-      const response = await fetch(`${TRANSACTIONS_API_BASE_URL}/?semester_id=${semesterId}`);
+      const response = await fetch(`${API_BASE_URL}/categories`);
       const data = await response.json();
-      setTransactions(data.transactions || []);
+      setCategories(data.map((cat) => cat.name));
     } catch (error) {
-      console.error("Error fetching transactions:", error);
+      console.error("Error fetching categories:", error);
     }
   };
 
   useEffect(() => {
     fetchSemesters();
+    fetchCategories();
   }, []);
 
   const handleSelectSemester = (semesterId) => {
@@ -93,7 +108,7 @@ const HomePage = () => {
     };
 
     try {
-      const response = await fetch(`${API_BASE_URL}/`, {
+      const response = await fetch(`${API_BASE_URL}/semesters`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -119,29 +134,39 @@ const HomePage = () => {
 
   const handleSaveSemesterSummary = async (updatedValues) => {
     if (!selectedSemester) return;
-
+  
+    // Calculate the new current capital if the starting capital is modified
+    let updatedCurrentCapital = semesterData[selectedSemester].current_capital;
+  
+    if (updatedValues.startingCapital !== undefined) {
+      const totalTransactionAmount = transactions.reduce((sum, txn) => sum + txn.amount, 0);
+      updatedCurrentCapital = updatedValues.startingCapital + totalTransactionAmount;
+    }
+  
     // Ensure the payload matches the expected structure
     const payload = {
       active_house_size: updatedValues.activeHouseSize,
       starting_capital: updatedValues.startingCapital,
       insurance_cost: updatedValues.insurance,
+      current_capital: updatedCurrentCapital, // Include updated current capital
     };
-
+  
     try {
-      const response = await fetch(`${API_BASE_URL}/${selectedSemester}`, {
+      const response = await fetch(`${API_BASE_URL}/semesters/${selectedSemester}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
       });
-
+  
       if (response.ok) {
         setSemesterData((prevData) => ({
           ...prevData,
           [selectedSemester]: {
             ...prevData[selectedSemester],
             ...updatedValues,
+            current_capital: updatedCurrentCapital, // Update local state
           },
         }));
         console.log("Semester updated successfully");
@@ -152,12 +177,13 @@ const HomePage = () => {
       console.error("Error updating semester:", error);
     }
   };
+  
 
   const handleDeleteSemester = async () => {
     if (!selectedSemester) return;
 
     try {
-      const response = await fetch(`${API_BASE_URL}/${selectedSemester}`, {
+      const response = await fetch(`${API_BASE_URL}/semesters/${selectedSemester}`, {
         method: "DELETE",
       });
 
@@ -184,6 +210,57 @@ const HomePage = () => {
     }
   };
 
+  const createCategory = async (newCategory) => {
+    try {
+      console.log(newCategory);
+
+      const response = await fetch(`${API_BASE_URL}/categories/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name: newCategory }),
+      });
+  
+      if (response.ok) {
+        setCategories((prev) => [...prev, newCategory]);
+        console.log("Category created successfully");
+      } else {
+        console.error("Failed to create category");
+      }
+    } catch (error) {
+      console.error("Error creating category:", error);
+    }
+  };
+  
+  const deleteCategory = async (category) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/categories/${category}`, {
+        method: "DELETE",
+      });
+  
+      if (response.ok) {
+        // Update transactions that belong to the deleted category
+        const updatedTransactions = transactions.map((txn) =>
+          txn.category === category ? { ...txn, category: "Uncategorized" } : txn
+        );
+  
+        // Update the transactions state
+        setTransactions(updatedTransactions);
+  
+        // Remove the category from the categories list
+        setCategories((prev) => prev.filter((cat) => cat !== category));
+  
+        console.log("Category deleted successfully, and associated transactions updated.");
+      } else {
+        console.error("Failed to delete category");
+      }
+    } catch (error) {
+      console.error("Error deleting category:", error);
+    }
+  };
+  
+  
   const filteredTransactions = transactions.filter((txn) =>
     Object.values(txn)
       .join(" ")
@@ -325,15 +402,8 @@ const HomePage = () => {
         isShown={isCategoryDialogShown}
         onClose={() => setIsCategoryDialogShown(false)}
         categories={categories}
-        onAddCategory={(newCategory) => {
-          if (!categories.includes(newCategory)) {
-            setCategories([...categories, newCategory]);
-          }
-        }}
-        onDeleteCategory={(category) => {
-          if (category === "Uncategorized") return;
-          setCategories(categories.filter((cat) => cat !== category));
-        }}
+        onAddCategory={createCategory}
+        onDeleteCategory={deleteCategory}
       />
 
       <Dialog

@@ -20,3 +20,5 @@
 - 1 add payload verification for patch functions so you can't just add random keys
 - 1 add refresh when updating summary
 - 3 add a contributers tab
+- 4 make the transactions pagination more efficient
+- 1 why is there two scroll bars
