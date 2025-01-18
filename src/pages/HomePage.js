@@ -12,7 +12,6 @@ import Statistics from "../components/Statistics";
 import TransactionsTable from "../components/TransactionsTable";
 import EditSummaryDialog from "../components/EditSummaryDialog";
 import ManageCategoriesDialog from "../components/ManageCategoriesDialog";
-import PieChart from "../components/PieChart";
 
 const API_BASE_URL = "http://localhost:5000/semesters"; // Update with your actual API base URL
 const TRANSACTIONS_API_BASE_URL = "http://localhost:5000/transactions"; // Transactions API base URL
@@ -115,6 +114,42 @@ const HomePage = () => {
       }
     } catch (error) {
       console.error("Error creating semester:", error);
+    }
+  };
+
+  const handleSaveSemesterSummary = async (updatedValues) => {
+    if (!selectedSemester) return;
+
+    // Ensure the payload matches the expected structure
+    const payload = {
+      active_house_size: updatedValues.activeHouseSize,
+      starting_capital: updatedValues.startingCapital,
+      insurance_cost: updatedValues.insurance,
+    };
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/${selectedSemester}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        setSemesterData((prevData) => ({
+          ...prevData,
+          [selectedSemester]: {
+            ...prevData[selectedSemester],
+            ...updatedValues,
+          },
+        }));
+        console.log("Semester updated successfully");
+      } else {
+        console.error("Failed to update semester");
+      }
+    } catch (error) {
+      console.error("Error updating semester:", error);
     }
   };
 
@@ -248,6 +283,7 @@ const HomePage = () => {
             insurance={semesterData[selectedSemester].insurance_cost || 0}
             transactions={transactions || []}
             categories={categories}
+            weeklyBalance={semesterData[selectedSemester].weekly_balance || []}
           />
 
           <Pane marginTop={16}>
@@ -283,7 +319,7 @@ const HomePage = () => {
         isShown={isEditDialogShown}
         onClose={() => setIsEditDialogShown(false)}
         semesterData={selectedSemester ? semesterData[selectedSemester] : {}}
-        onSave={(updatedValues) => console.log("Save semester summary", updatedValues)}
+        onSave={handleSaveSemesterSummary}
       />
       <ManageCategoriesDialog
         isShown={isCategoryDialogShown}

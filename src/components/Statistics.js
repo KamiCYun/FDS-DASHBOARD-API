@@ -11,6 +11,7 @@ const Statistics = ({
   activeHouseSize,
   insurance,
   transactions,
+  weeklyBalance
 }) => {
   const { theme } = useTheme(); // Access the current theme
 
@@ -30,11 +31,13 @@ const Statistics = ({
   };
 
   const calculateWeeklyBalances = () => {
-    const weeklyBalances = [];
-    let runningTotal = startingCapital;
-    transactions.forEach((txn) => {
-      runningTotal += txn.amount;
-      weeklyBalances.push(runningTotal);
+    const weeklyBalances = {
+      "balances": [],
+      "dates": []
+    };
+    weeklyBalance.forEach((week) => {
+      weeklyBalances.balances.push(week.value);
+      weeklyBalances.dates.push(week.date);
     });
     return weeklyBalances;
   };

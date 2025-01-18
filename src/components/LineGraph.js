@@ -25,11 +25,11 @@ const LineGraph = ({ data }) => {
   };
 
   const chartData = {
-    labels: data.map((_, index) => `Week ${index + 1}`),
+    labels: data.dates,
     datasets: [
       {
         label: "Weekly Balance",
-        data: data,
+        data: data.balances,
         borderColor: dynamicColors.borderColor,
         backgroundColor: dynamicColors.backgroundColor,
         fill: true,
