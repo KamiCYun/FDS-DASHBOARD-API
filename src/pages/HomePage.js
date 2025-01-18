@@ -13,7 +13,7 @@ import TransactionsTable from "../components/TransactionsTable";
 import EditSummaryDialog from "../components/EditSummaryDialog";
 import ManageCategoriesDialog from "../components/ManageCategoriesDialog";
 
-const API_BASE_URL = "http://localhost:5000"; // Update with your actual API base URL
+const API_BASE_URL = "https://api-pihdtekhfq-uc.a.run.app";
 
 const HomePage = () => {
   const { theme } = useTheme(); // Access the current theme

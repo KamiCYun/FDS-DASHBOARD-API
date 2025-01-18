@@ -1,6 +1,6 @@
 from firebase_admin import initialize_app, credentials
-from firebase_functions import https_fn
-from flask import Flask
+from firebase_functions import https_fn, options
+from flask import Flask, request, redirect
 from flask_cors import CORS
 from routes.categories import categories_bp
 from routes.reimbursements import reimbursements_bp
@@ -13,11 +13,7 @@ initialize_app(cred)
 
 # Create Flask app
 app = Flask(__name__)
-CORS(app, resources={
-    r"/*": {
-        "origins": ["https://umcp-fds.web.app", "http://localhost:3000"]
-    }
-})
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Register Blueprints
 app.register_blueprint(categories_bp, url_prefix="/categories")

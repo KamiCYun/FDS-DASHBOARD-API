@@ -75,7 +75,7 @@ function Sidebar() {
         </Pane>
         <Pane display="flex" alignItems="center" justifyContent="center">
           <Text size={300} color={theme === "light" ? "muted" : "#b39ddb"}>
-            164 v0.0.1
+            CYUN v0.0.1
           </Text>
         </Pane>
       </Pane>

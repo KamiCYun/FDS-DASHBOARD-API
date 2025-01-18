@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Table, SelectMenu, Button, Pane } from "evergreen-ui";
 import { useTheme } from "../App"; // Import ThemeContext
 
+const API_BASE_URL = "https://api-pihdtekhfq-uc.a.run.app";
 const TransactionsTable = ({ transactions, categories, setSemesterData, pageSize = 10 }) => {
   const { theme } = useTheme(); // Access the current theme
 
@@ -51,7 +52,7 @@ const TransactionsTable = ({ transactions, categories, setSemesterData, pageSize
 
   const updateTransactionCategory = async (transactionId, newCategory) => {
     try {
-      const response = await fetch(`http://localhost:5000/transactions/${transactionId}`, {
+      const response = await fetch(`${API_BASE_URL}/transactions/${transactionId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
