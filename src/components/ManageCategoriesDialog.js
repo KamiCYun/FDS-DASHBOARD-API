@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Dialog, Pane, Text, TextInput, Button } from "evergreen-ui";
 import { useTheme } from "../App"; // Import ThemeContext
+import "../App.css"; // Import the CSS file with overrides
 
 const ManageCategoriesDialog = ({
   isShown,
@@ -12,34 +13,53 @@ const ManageCategoriesDialog = ({
   const [newCategory, setNewCategory] = useState("");
   const { theme } = useTheme(); // Access the current theme
 
-  // Define dynamic styles based on the theme
-  const dynamicStyles = {
-    backgroundColor: theme === "light" ? "#ffffff" : "#1e1e1e",
-    textColor: theme === "light" ? "#000000" : "#e0e0e0",
-    inputBackground: theme === "light" ? "#f9f9f9" : "#2e2e2e",
-    inputTextColor: theme === "light" ? "#000000" : "#e0e0e0",
-    buttonBackground: theme === "light" ? "#007bff" : "#673ab7",
-    buttonTextColor: theme === "light" ? "#ffffff" : "#e0e0e0",
-  };
-
   return (
     <Dialog
       isShown={isShown}
       title="Manage Categories"
       onCloseComplete={onClose}
-      confirmLabel="Done"
-      style={{
-        backgroundColor: dynamicStyles.backgroundColor,
-        color: dynamicStyles.textColor,
+      className="evergreen-dialog"
+      contentContainerProps={{
+        style: {
+          backgroundColor: theme === "light" ? "#ffffff" : "#282828",
+          color: theme === "light" ? "#000000" : "#F3EEED",
+        },
       }}
-      titleStyle={{
-        color: dynamicStyles.textColor,
+      overlayProps={{
+        style: {
+          backgroundColor:
+            theme === "light" ? "rgba(0, 0, 0, 0.3)" : "#282828",
+        },
       }}
+      renderFooter={(close) => (
+        <Pane
+          display="flex"
+          justifyContent="flex-end"
+          padding={16}
+          background={theme === "light" ? "#006400" : "#355E3B"}
+        >
+          <Button
+            onClick={close}
+            style={{
+              backgroundColor: theme === "light" ? "#006400" : "#355E3B", // Dark green button
+              color: theme === "light" ? "#FFC0CB" : "#ffffff", // Pink text
+              border: "none",
+            }}
+          >
+            Done
+          </Button>
+        </Pane>
+      )}
     >
       <Pane display="flex" flexDirection="column" gap={16}>
         {/* Add a New Category */}
-        <Pane>
-          <Text color={dynamicStyles.textColor}>Add a New Category:</Text>
+        <Pane display="flex" alignItems="center" gap={8}>
+          <Text
+            color={theme === "light" ? "#000000" : "#F3EEED"}
+            flex="1"
+          >
+            Add a New Category:
+          </Text>
           <TextInput
             placeholder="Enter new category"
             value={newCategory}
@@ -51,13 +71,14 @@ const ManageCategoriesDialog = ({
               }
             }}
             style={{
-              backgroundColor: dynamicStyles.inputBackground,
-              color: dynamicStyles.inputTextColor,
+              backgroundColor: theme === "light" ? "#f9f9f9" : "#282828",
+              color: theme === "light" ? "#000000" : "#F3EEED",
+              flex: 2,
             }}
           />
           <Button
             appearance="primary"
-            marginTop={8}
+            marginLeft="auto" // Align button to the right
             onClick={() => {
               if (newCategory.trim()) {
                 onAddCategory(newCategory.trim());
@@ -65,8 +86,8 @@ const ManageCategoriesDialog = ({
               }
             }}
             style={{
-              backgroundColor: dynamicStyles.buttonBackground,
-              color: dynamicStyles.buttonTextColor,
+              backgroundColor: theme === "light" ? "#007bff" : "#355E3B",
+              color: theme === "light" ? "#ffffff" : "#F3EEED",
             }}
           >
             Add
@@ -75,7 +96,9 @@ const ManageCategoriesDialog = ({
 
         {/* Existing Categories */}
         <Pane>
-          <Text color={dynamicStyles.textColor}>Existing Categories:</Text>
+          <Text color={theme === "light" ? "#000000" : "#F3EEED"}>
+            Existing Categories:
+          </Text>
           {categories.map((cat) => (
             <Pane
               key={cat}
@@ -83,18 +106,17 @@ const ManageCategoriesDialog = ({
               alignItems="center"
               justifyContent="space-between"
               marginTop={8}
-              style={{
-                color: dynamicStyles.textColor,
-              }}
             >
-              <Text color={dynamicStyles.textColor}>{cat}</Text>
+              <Text color={theme === "light" ? "#000000" : "#F3EEED"}>
+                {cat}
+              </Text>
               {cat !== "Uncategorized" && (
                 <Button
-                  appearance="minimal"
-                  intent="danger"
+                  appearance="primary"
                   onClick={() => onDeleteCategory(cat)}
                   style={{
-                    color: dynamicStyles.textColor,
+                    backgroundColor: theme === "light" ? "#007bff" : "#355E3B",
+                    color: theme === "light" ? "#ffffff" : "#F3EEED",
                   }}
                 >
                   Delete

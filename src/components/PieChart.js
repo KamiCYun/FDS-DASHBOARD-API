@@ -17,8 +17,8 @@ const PieChart = ({ data }) => {
   const dynamicColors = {
     backgroundColors: theme === "light"
       ? ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"] // Bright colors for light mode
-      : ["#FF6384", "#673AB7", "#FFCE56", "#26C6DA", "#8E44AD"], // Muted colors for dark mode
-    textColor: theme === "light" ? "#000000" : "#e0e0e0", // Axis/legend text color
+      : ["#355E3B", "#673AB7", "#FFCE56", "#26C6DA", "#8E44AD"], // Muted colors for dark mode
+    textColor: theme === "light" ? "#000000" : "#F3EEED", // Axis/legend text color
   };
 
   const chartData = {

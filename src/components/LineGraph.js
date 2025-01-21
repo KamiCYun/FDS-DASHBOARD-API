@@ -18,10 +18,10 @@ const LineGraph = ({ data }) => {
 
   // Define dynamic colors based on the theme
   const dynamicColors = {
-    borderColor: theme === "light" ? "#36A2EB" : "#BB86FC", // Blue for light, purple for dark
-    backgroundColor: theme === "light" ? "rgba(54, 162, 235, 0.2)" : "rgba(187, 134, 252, 0.2)", // Light or dark background
-    textColor: theme === "light" ? "#000000" : "#e0e0e0", // Text color for labels
-    gridColor: theme === "light" ? "#e4e4e4" : "#444444", // Grid color
+    borderColor: theme === "light" ? "#36A2EB" : "#a1b5a2", // Blue for light, purple for dark
+    backgroundColor: theme === "light" ? "rgba(54, 162, 235, 0.2)" : "#F3EEED", // Light or dark background
+    textColor: theme === "light" ? "#000000" : "#F3EEED", // Text color for labels
+    gridColor: theme === "light" ? "#e4e4e4" : "#525252", // Grid color
   };
 
   const chartData = {

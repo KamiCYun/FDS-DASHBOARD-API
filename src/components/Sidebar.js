@@ -12,6 +12,7 @@ function Sidebar() {
 
   return (
     <Pane
+      className="sidebar"
       display="flex"
       flexDirection="column"
       justifyContent="space-between"
@@ -28,7 +29,7 @@ function Sidebar() {
       {/* Top section with menu buttons */}
       <Pane>
         <Button
-          className={theme === "light" ? "button-light" : "button-dark"}
+          className={`menu-button ${theme === "light" ? "button-light" : "button-dark"}`}
           justifyContent="flex-start"
           width="100%"
           marginBottom={12}
@@ -37,7 +38,7 @@ function Sidebar() {
           Financials
         </Button>
         <Button
-          className={theme === "light" ? "button-light" : "button-dark"}
+          className={`menu-button ${theme === "light" ? "button-light" : "button-dark"}`}
           justifyContent="flex-start"
           width="100%"
           marginBottom={12}
@@ -46,7 +47,7 @@ function Sidebar() {
           Reimbursements
         </Button>
         <Button
-          className={theme === "light" ? "button-light" : "button-dark"}
+          className={`menu-button ${theme === "light" ? "button-light" : "button-dark"}`}
           justifyContent="flex-start"
           width="100%"
           marginBottom={12}
@@ -64,17 +65,18 @@ function Sidebar() {
           justifyContent="space-between"
           marginBottom={16}
         >
-          <Text size={300} color={theme === "light" ? "muted" : "#b39ddb"}>
+          <Text size={300} color={theme === "light" ? "#555555" : "#b39ddb"}>
             Dark Mode
           </Text>
           <Switch
             checked={theme === "dark"}
             onChange={toggleTheme}
             height={20}
+            aria-label="Toggle dark mode"
           />
         </Pane>
         <Pane display="flex" alignItems="center" justifyContent="center">
-          <Text size={300} color={theme === "light" ? "muted" : "#b39ddb"}>
+          <Text size={300} color={theme === "light" ? "#555555" : "#b39ddb"}>
             CYUN v0.0.1
           </Text>
         </Pane>

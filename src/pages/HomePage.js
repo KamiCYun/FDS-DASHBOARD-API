@@ -20,12 +20,12 @@ const HomePage = () => {
 
   // Define dynamic styles based on the theme
   const dynamicStyles = {
-    backgroundColor: theme === "light" ? "#ffffff" : "#121212",
-    textColor: theme === "light" ? "#000000" : "#e0e0e0",
-    buttonBackground: theme === "light" ? "#007bff" : "#673ab7",
-    buttonTextColor: theme === "light" ? "#ffffff" : "#e0e0e0",
-    inputBackground: theme === "light" ? "#f9f9f9" : "#2e2e2e",
-    inputTextColor: theme === "light" ? "#000000" : "#e0e0e0",
+    backgroundColor: theme === "light" ? "#ffffff" : "#282828",
+    textColor: theme === "light" ? "#000000" : "#F3EEED",
+    buttonBackground: theme === "light" ? "#007bff" : "#355E3B",
+    buttonTextColor: theme === "light" ? "#ffffff" : "#F3EEED",
+    inputBackground: theme === "light" ? "#f9f9f9" : "#282828",
+    inputTextColor: theme === "light" ? "#000000" : "#F3EEED",
   };
 
   const [semesters, setSemesters] = useState([]);
@@ -412,10 +412,13 @@ const HomePage = () => {
         onCloseComplete={() => setIsNewSemesterDialogShown(false)}
         confirmLabel="Create"
         onConfirm={handleCreateNewSemester}
-        style={{
-          backgroundColor: dynamicStyles.backgroundColor,
-          color: dynamicStyles.textColor,
+        contentContainerProps={{
+          style: {
+            backgroundColor: theme === "light" ? "#ffffff" : "#282828", // Light: White, Dark: Pink
+            color: theme === "light" ? "#000000" : "#F3EEED", // Text color based on theme
+          },
         }}
+
       >
         <TextInput
           placeholder="Enter new semester name"

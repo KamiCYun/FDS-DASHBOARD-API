@@ -8,12 +8,12 @@ const TransactionsTable = ({ transactions, categories, setSemesterData, pageSize
 
   // Define dynamic styles based on the theme
   const dynamicStyles = {
-    textColor: theme === "light" ? "#000000" : "#e0e0e0",
-    backgroundColor: theme === "light" ? "#ffffff" : "#1e1e1e",
-    headerBackgroundColor: theme === "light" ? "#f9f9f9" : "#2e2e2e",
-    borderColor: theme === "light" ? "#e4e7eb" : "#444444",
-    buttonBackgroundColor: theme === "light" ? "#007bff" : "#673ab7",
-    buttonTextColor: theme === "light" ? "#ffffff" : "#e0e0e0",
+    textColor: theme === "light" ? "#000000" : "#F3EEED",
+    backgroundColor: theme === "light" ? "#ffffff" : "#282828",
+    headerBackgroundColor: theme === "light" ? "#f9f9f9" : "#355E3B",
+    borderColor: theme === "light" ? "#e4e7eb" : "#F3EEED",
+    buttonBackgroundColor: theme === "light" ? "#007bff" : "#355E3B",
+    buttonTextColor: theme === "light" ? "#ffffff" : "#F3EEED",
   };
 
   const [currentPage, setCurrentPage] = useState(1);

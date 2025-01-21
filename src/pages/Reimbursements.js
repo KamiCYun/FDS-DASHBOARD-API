@@ -2,18 +2,18 @@ import React, { useState, useEffect } from "react";
 import { Table, Button, Pane, Heading } from "evergreen-ui"; // Updated import for Heading
 import { useTheme } from "../App"; // Import ThemeContext
 
-const API_BASE_URL = "https://api-pihdtekhfq-uc.a.run.app/";
+const API_BASE_URL = "http://localhost:3000/";
 const Reimbursements = () => {
   const { theme } = useTheme(); // Access the current theme
 
   // Define dynamic styles based on the theme
   const dynamicStyles = {
-    textColor: theme === "light" ? "#000000" : "#ffffff",
-    backgroundColor: theme === "light" ? "#ffffff" : "#121212",
-    headerBackgroundColor: theme === "light" ? "#f9f9f9" : "#2e2e2e",
-    borderColor: theme === "light" ? "#e4e7eb" : "#444444",
-    buttonBackgroundColor: theme === "light" ? "#007bff" : "#673ab7", // Dark green for dark mode
-    buttonTextColor: theme === "light" ? "#ffffff" : "#e0e0e0",
+    textColor: theme === "light" ? "#000000" : "#F3EEED",
+    backgroundColor: theme === "light" ? "#ffffff" : "#282828",
+    headerBackgroundColor: theme === "light" ? "#f9f9f9" : "#282828",
+    borderColor: theme === "light" ? "#e4e7eb" : "#F3EEED",
+    buttonBackgroundColor: theme === "light" ? "#007bff" : "#355E3B", // Dark green for dark mode
+    buttonTextColor: theme === "light" ? "#ffffff" : "#F3EEED",
   };
 
   const [reimbursements, setReimbursements] = useState([]);

@@ -16,10 +16,10 @@ const EditSummaryDialog = ({ isShown, onClose, semesterData, onSave }) => {
   };
 
   const dynamicStyles = {
-    backgroundColor: theme === "light" ? "#ffffff" : "#121212",
-    textColor: theme === "light" ? "#000000" : "#e0e0e0",
-    inputBackground: theme === "light" ? "#f9f9f9" : "#2e2e2e",
-    inputTextColor: theme === "light" ? "#000000" : "#e0e0e0",
+    backgroundColor: theme === "light" ? "#ffffff" : "#2e2e2e",
+    textColor: theme === "light" ? "#000000" : "#F3EEED",
+    inputBackground: theme === "light" ? "#f9f9f9" : "#355E3B",
+    inputTextColor: theme === "light" ? "#000000" : "#F3EEED",
     overlayBackground: theme === "light" ? "rgba(0, 0, 0, 0.3)" : "rgba(255, 255, 255, 0.1)",
   };
 
@@ -30,6 +30,12 @@ const EditSummaryDialog = ({ isShown, onClose, semesterData, onSave }) => {
       onCloseComplete={onClose}
       onConfirm={handleSave}
       confirmLabel="Save"
+      contentContainerProps={{
+        style: {
+          backgroundColor: theme === "light" ? "#ffffff" : "#282828",
+          color: theme === "light" ? "#000000" : "#F3EEED",
+        },
+      }}
       style={{
         backgroundColor: dynamicStyles.backgroundColor,
         color: dynamicStyles.textColor,
@@ -54,8 +60,9 @@ const EditSummaryDialog = ({ isShown, onClose, semesterData, onSave }) => {
               handleChange("startingCapital", parseFloat(e.target.value))
             }
             style={{
-              backgroundColor: dynamicStyles.inputBackground,
-              color: dynamicStyles.inputTextColor,
+              backgroundColor: theme === "light" ? "#f9f9f9" : "#2e2e2e",
+              color: theme === "light" ? "#000000" : "#F3EEED",
+              flex: 2,
             }}
           />
         </Pane>
@@ -70,8 +77,9 @@ const EditSummaryDialog = ({ isShown, onClose, semesterData, onSave }) => {
               handleChange("activeHouseSize", parseInt(e.target.value, 10))
             }
             style={{
-              backgroundColor: dynamicStyles.inputBackground,
-              color: dynamicStyles.inputTextColor,
+              backgroundColor: theme === "light" ? "#f9f9f9" : "#2e2e2e",
+              color: theme === "light" ? "#000000" : "#F3EEED",
+              flex: 2,
             }}
           />
         </Pane>
@@ -86,8 +94,9 @@ const EditSummaryDialog = ({ isShown, onClose, semesterData, onSave }) => {
               handleChange("insurance", parseFloat(e.target.value))
             }
             style={{
-              backgroundColor: dynamicStyles.inputBackground,
-              color: dynamicStyles.inputTextColor,
+              backgroundColor: theme === "light" ? "#f9f9f9" : "#2e2e2e",
+              color: theme === "light" ? "#000000" : "#F3EEED",
+              flex: 2,
             }}
           />
         </Pane>

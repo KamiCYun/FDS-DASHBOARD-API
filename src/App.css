@@ -4,10 +4,73 @@
     color: #000000;
   }
   
-  /* Dark Theme */
+/* Light Mode Header */
+.light-mode .ub-flx-srnk_0.ub-dspl_flex {
+  background-color: #ffffff; /* White background */
+  color: #000000; /* Black text */
+}
+
+/* Dark Mode Header */
+.dark-mode .ub-flx-srnk_0.ub-dspl_flex {
+  background-color: #282828 !important; /* Dark gray background */
+  color: #F3EEED !important; /* Light gray text */
+}
+
+/* Light Mode Footer */
+.light-mode .ub-dspl_flex.ub-just-cnt_flex-end {
+  background-color: #ffffff; /* White background */
+  color: #000000; /* Black text */
+}
+
+/* Dark Mode Footer */
+.dark-mode .ub-dspl_flex.ub-just-cnt_flex-end {
+  background-color: #282828 !important; /* Dark gray background */
+  color: #F3EEED !important; /* Light gray text */
+}
+
+/* Dark Mode */
+.dark-mode .ub-mt_0px.ub-mb_0px.ub-color_101840 {
+  color: #F3EEED !important; /* Lighter gray for dark mode */
+}
+
+
+
+/* Light Mode (default) */
+.light-mode .ub-bg-clr_3366FF {
+  background-color: #3366FF; /* Default blue */
+}
+
+.light-mode .ub-color_white {
+  color: #F3EEED; /* Default white text */
+}
+
+.light-mode .ub-b-btm-clr_3366FF,
+.light-mode .ub-b-lft-clr_3366FF,
+.light-mode .ub-b-rgt-clr_3366FF,
+.light-mode .ub-b-top-clr_3366FF {
+  border-color: #3366FF; /* Default blue borders */
+}
+
+/* Dark Mode */
+.dark-mode .ub-bg-clr_3366FF {
+  background-color: #355E3B !important; /* Dark green background */
+}
+
+.dark-mode .ub-color_white {
+  color: #F3EEED !important; /* Pink text */
+}
+
+.dark-mode .ub-b-btm-clr_3366FF,
+.dark-mode .ub-b-lft-clr_3366FF,
+.dark-mode .ub-b-rgt-clr_3366FF,
+.dark-mode .ub-b-top-clr_3366FF {
+  border-color: #355E3B !important; /* Dark green borders */
+}
+
+
   .app-container.dark {
-    background-color: #121212; /* Deep dark background */
-    color: #e0e0e0; /* Light gray text */
+    background-color: #282828; /* Deep dark background */
+    color: #F3EEED; /* Light gray text */
   }
   
   /* Buttons and accents */
@@ -18,14 +81,14 @@
   }
   
   .button-dark {
-    background-color: #1e1e1e; /* Dark button background */
-    color: #b39ddb; /* Light purple text */
-    border: 1px solid #673ab7; /* Purple border */
+    background-color: #355E3B; /* Dark button background */
+    color: #F3EEED; /* Light purple text */
+    border: 1px solid #F3EEED; /* Purple border */
   }
   
   .button-dark:hover {
-    background-color: #673ab7; /* Purple hover */
-    color: #ffffff; /* White text */
+    background-color: #355E3B; /* Purple hover */
+    color: #F3EEED; /* White text */
   }
   
   /* Smooth transitions */

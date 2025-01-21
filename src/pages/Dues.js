@@ -7,15 +7,15 @@ const Dues = () => {
 
   // Define dynamic styles based on the theme
   const dynamicStyles = {
-    backgroundColor: theme === "light" ? "#ffffff" : "#121212",
-    textColor: theme === "light" ? "#000000" : "#e0e0e0",
-    inputBackground: theme === "light" ? "#f9f9f9" : "#2e2e2e",
+    backgroundColor: theme === "light" ? "#ffffff" : "#282828",
+    textColor: theme === "light" ? "#000000" : "#F3EEED",
+    inputBackground: theme === "light" ? "#f9f9f9" : "#355E3B",
     inputTextColor: theme === "light" ? "#000000" : "#e0e0e0",
-    buttonBackground: theme === "light" ? "#007bff" : "#004d40", // Dark green for dark mode
-    buttonTextColor: theme === "light" ? "#ffffff" : "#e0e0e0",
+    buttonBackground: theme === "light" ? "#007bff" : "#355E3B", // Dark green for dark mode
+    buttonTextColor: theme === "light" ? "#ffffff" : "#F3EEED",
     infoColor: theme === "light" ? "#007bff" : "#00acc1",
   };
-
+// ff6384 PINK
   // State for variables
   const [totalAmountDue, setTotalAmountDue] = useState("");
   const [miscExpenses, setMiscExpenses] = useState("");
