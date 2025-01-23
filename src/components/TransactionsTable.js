@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Table, SelectMenu, Button, Pane } from "evergreen-ui";
 import { useTheme } from "../App"; // Import ThemeContext
 
@@ -15,6 +15,17 @@ const TransactionsTable = ({ transactions, categories, setSemesterData, pageSize
     buttonBackgroundColor: theme === "light" ? "#007bff" : "#355E3B",
     buttonTextColor: theme === "light" ? "#ffffff" : "#F3EEED",
   };
+
+  useEffect(() => {
+    if (theme === "dark") {
+      document.body.classList.add("darkmode");
+      console.log("Dark mode activated");
+    } else {
+      document.body.classList.remove("darkmode");
+      console.log("Light mode activated");
+    }
+  }, [theme]);
+  
 
   const [currentPage, setCurrentPage] = useState(1);
 

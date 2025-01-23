@@ -18,8 +18,8 @@ const Statistics = ({
   // Define dynamic styles based on the theme
   const dynamicStyles = {
     textColor: theme === "light" ? "#000000" : "#e0e0e0",
-    backgroundColor: theme === "light" ? "#f9f9f9" : "#121212",
-    borderColor: theme === "light" ? "#e4e7eb" : "#444444",
+    backgroundColor: theme === "light" ? "#f9f9f9" : "#282828",
+    borderColor: theme === "light" ? "#e4e7eb" : "#355E3B",
   };
 
   const calculateCategoryBreakdown = () => {

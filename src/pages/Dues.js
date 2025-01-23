@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Pane, Heading, TextInputField, Button, Text, Tooltip, InfoSignIcon } from "evergreen-ui";
 import { useTheme } from "../App"; // Import ThemeContext
 
@@ -15,7 +15,18 @@ const Dues = () => {
     buttonTextColor: theme === "light" ? "#ffffff" : "#F3EEED",
     infoColor: theme === "light" ? "#007bff" : "#00acc1",
   };
-// ff6384 PINK
+  
+  useEffect(() => {
+    if (theme === "dark") {
+      document.body.classList.add("dark-theme");
+    } else {
+      document.body.classList.remove("dark-theme");
+    }
+    return () => {
+      document.body.classList.remove("dark-theme");
+    };
+  }, [theme]);
+
   // State for variables
   const [totalAmountDue, setTotalAmountDue] = useState("");
   const [miscExpenses, setMiscExpenses] = useState("");

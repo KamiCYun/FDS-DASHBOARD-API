@@ -28,6 +28,17 @@ const HomePage = () => {
     inputTextColor: theme === "light" ? "#000000" : "#F3EEED",
   };
 
+  useEffect(() => {
+    if (theme === "dark") {
+      document.body.classList.add("dark-theme");
+    } else {
+      document.body.classList.remove("dark-theme");
+    }
+    return () => {
+      document.body.classList.remove("dark-theme");
+    };
+  }, [theme]);
+
   const [semesters, setSemesters] = useState([]);
   const [selectedSemester, setSelectedSemester] = useState(null);
   const [isNewSemesterDialogShown, setIsNewSemesterDialogShown] = useState(false);
@@ -270,6 +281,7 @@ const HomePage = () => {
 
   return (
     <Pane
+      id="financial-dropdown"
       padding={16}
       style={{
         backgroundColor: dynamicStyles.backgroundColor,
@@ -292,6 +304,10 @@ const HomePage = () => {
           }))}
           selected={selectedSemester}
           onSelect={(item) => handleSelectSemester(item.value)}
+          style={{
+            backgroundColor: "#282828",
+          }}
+          
         >
           <Button
             style={{

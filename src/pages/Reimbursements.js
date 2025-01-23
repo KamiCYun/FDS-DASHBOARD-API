@@ -18,6 +18,17 @@ const Reimbursements = () => {
 
   const [reimbursements, setReimbursements] = useState([]);
 
+  useEffect(() => {
+    if (theme === "dark") {
+      document.body.classList.add("dark-theme");
+    } else {
+      document.body.classList.remove("dark-theme");
+    }
+    return () => {
+      document.body.classList.remove("dark-theme");
+    };
+  }, [theme]);
+  
   const fetchReimbursements = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/reimbursements`);

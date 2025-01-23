@@ -20,7 +20,6 @@ function Sidebar() {
       padding={16}
       height="100vh" // Full height of the viewport
       width={250}
-      borderRight
       position="fixed" // Make the sidebar fixed
       top={0} // Align to the top of the viewport
       left={0} // Align to the left of the viewport
@@ -65,7 +64,7 @@ function Sidebar() {
           justifyContent="space-between"
           marginBottom={16}
         >
-          <Text size={300} color={theme === "light" ? "#555555" : "#b39ddb"}>
+          <Text size={300} color={theme === "light" ? "#555555" : "#F3EEED"}>
             Dark Mode
           </Text>
           <Switch
@@ -76,7 +75,7 @@ function Sidebar() {
           />
         </Pane>
         <Pane display="flex" alignItems="center" justifyContent="center">
-          <Text size={300} color={theme === "light" ? "#555555" : "#b39ddb"}>
+          <Text size={300} color={theme === "light" ? "#555555" : "#F3EEED"}>
             CYUN v0.0.1
           </Text>
         </Pane>

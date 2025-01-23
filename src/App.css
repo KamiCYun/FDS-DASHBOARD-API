@@ -10,6 +10,14 @@
   color: #000000; /* Black text */
 }
 
+body {
+  background-color: #ffffff; /* Light theme background color */
+}
+
+body.dark-theme {
+  background-color: #282828; /* Dark theme background color */
+}
+
 /* Dark Mode Header */
 .dark-mode .ub-flx-srnk_0.ub-dspl_flex {
   background-color: #282828 !important; /* Dark gray background */
@@ -33,6 +41,37 @@
   color: #F3EEED !important; /* Lighter gray for dark mode */
 }
 
+.dark-mode .ub-fill_00acc1 {
+  fill: #F3EEED !important;
+}
+
+.dark-mode .ub-color_101840 {
+  color: #F3EEED;
+}
+
+
+.dark-mode .dropdown-menu .ub-b-btm_1px-solid-E6E8F0,
+.dark-mode .dropdown-menu .ub-dspl_flex,
+.dark-mode .dropdown-menu .ub-algn-itms_center,
+.dark-mode .dropdown-menu .ub-pb_8px,
+.dark-mode .dropdown-menu .ub-pl_8px,
+.dark-mode .ub-pr_8px,
+.dark-mode .dropdown-menu .ub-pt_8px,
+.dark-mode .dropdown-menu .ub-h_40px,
+.dark-mode .dropdown-menu .ub-box-szg_border-box {
+  background-color: #282828 !important;
+  color: #F3EEED !important;
+  border: 1px solid #F3EEED;
+}
+
+.dark-mode .ub-flx_1.ub-box-szg_border-box:not(.sidebar .ub-flx_1.ub-box-szg_border-box) {
+  background-color: #282828 !important; /* Dark mode background */
+  color: #F3EEED !important; /* Dark mode text */
+}
+
+.dark-mode .ub-bg-clr_3366FF_12etfvq:before {
+  background-color: #355E3B;
+}
 
 
 /* Light Mode (default) */
